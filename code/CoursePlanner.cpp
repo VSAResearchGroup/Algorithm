@@ -19,3 +19,8 @@ map<AugNode*, CourseMatrix> CoursePlanner::planPhase1(vector<AugNode*>& startNod
 {
 	return _planner->phase1(startNodes, endNodes);
 }
+
+vector<DegreePlan> CoursePlanner::planPhase2(map<AugNode*, CourseMatrix> input, QuarterNode start_qtr)
+{
+	return _planner->phase2(input, start_qtr);
+}

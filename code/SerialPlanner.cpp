@@ -78,7 +78,7 @@ void SerialPlanner::probe_graph(vector<AugNode*>& startNodes, vector<AugNode*>& 
 	while (!q.empty())
 	{
 		AugNode* node = q.front();
-		
+
 		q.pop();
 		if (node->course->prereq_nodes.empty())
 		{
@@ -156,6 +156,240 @@ map<AugNode*, CourseMatrix> SerialPlanner::phase1(vector<AugNode*>& startNodes, 
 	map<AugNode*, CourseMatrix> pathsForAllEnds;
 	augment_graph(endNodes);
 	probe_graph(startNodes, endNodes, pathsForAllEnds);
+	build_req_matrix(startNodes); //prep for phase 2
 	return pathsForAllEnds;
+}
+
+void SerialPlanner::build_req_matrix(vector<AugNode*>& startNodes)
+{
+	for (auto crs = startNodes.begin(); crs != startNodes.end(); crs++)
+	{
+		scan_and_add(*crs, vector<AugNode*>());
+	}
+}
+
+void SerialPlanner::scan_and_add(AugNode* crs, vector<AugNode*>& parents)
+{
+	if (_req_matrix.find(crs) == _req_matrix.end())
+	{
+		crs->isQueued1 = false;
+		crs->isQueued2 = false;
+		_req_matrix.insert(pair<AugNode*, vector<AugNode*>>(crs, vector<AugNode*>()));
+
+		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
+		{
+			_req_matrix[crs].push_back(*scan_crs);
+			for (auto prt = parents.begin(); prt != parents.end(); prt++)
+			{
+				_req_matrix[*prt].push_back(*scan_crs);
+			}
+
+		}
+		if (!crs->course->postreq_nodes.empty())
+		{
+			parents.push_back(crs);
+		}
+		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
+		{
+			scan_and_add(*scan_crs, parents);
+		}
+	}
+}
+
+AugNode* SerialPlanner::get_target_with_shortest_path(map<AugNode*, CourseMatrix>& paths_map)
+{
+	AugNode* target_crs = paths_map.begin()->first;
+	for (auto target = paths_map.begin(); target != paths_map.end(); target++)
+	{
+		if (target->second[0].size() < paths_map[target_crs][0].size())
+		{
+			target_crs = target->first;
+		}
+	}
+	return target_crs;
+}
+
+DegreePlan SerialPlanner::chain_end_courses(map<AugNode*, CourseMatrix>& paths_map, QuarterNode start_qtr)
+{
+	DegreePlan qtr_map;
+	unsigned short start_yr = start_qtr.year;
+	for (int i = 0; i < 4; i++)
+	{
+		qtr_map.insert(pair<QuarterNode, vector<AugNode*>>(start_qtr, vector<AugNode*>()));
+		start_qtr = start_qtr.next_qtr();
+	}
+	for (auto target = paths_map.begin(); target != paths_map.end(); target++)
+	{
+		QuarterNode qtr;
+		qtr.quarter = target->first->course->quarters[0];
+		qtr.year = start_yr;
+		if (qtr_map.find(qtr) == qtr_map.end())
+			qtr.year++;
+		qtr_map[qtr].push_back(target->first);
+	}
+	return qtr_map;
+}
+
+
+void SerialPlanner::merge_paths_into_qtr_chain(DegreePlan& qtr_chain, vector<AugNode*> path, ushort year)
+{
+
+	for (auto crs = path.begin(); crs != path.end(); crs++)
+	{
+		if (!(*crs)->isQueued1)
+		{
+			QuarterNode qtr;
+			qtr.quarter = (*crs)->course->quarters[0];
+			qtr.year = year;
+			place_crs_in_chain(qtr_chain, *crs, qtr);
+		}
+	}
+}
+
+void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, QuarterNode qtr)
+{
+
+	vector<AugNode*>* test_qtr_crses = nullptr;
+	if (qtr < qtr_chain.begin()->first)
+	{
+		qtr.year++; //meant for the next year
+	}
+	if (qtr_chain.find(qtr) == qtr_chain.end())
+	{
+
+		QuarterNode to_add = qtr_chain.rbegin()->first;
+		while (to_add != qtr)
+		{
+			to_add = to_add.next_qtr();
+			qtr_chain.insert(pair<QuarterNode, vector<AugNode*>>(to_add, vector<AugNode*>()));
+		}
+	}
+
+	test_qtr_crses = &qtr_chain[qtr];
+
+	bool add_crs = true;
+	vector<pair<AugNode*, QuarterNode>> crs_for_deference;
+	auto test_qtr_itr = qtr_chain.find(qtr);
+
+	for (auto qtr_itr = qtr_chain.begin(); qtr_itr != test_qtr_itr; qtr_itr++)
+	{
+		for (auto c = qtr_itr->second.begin(); c != qtr_itr->second.end(); c++)
+		{
+			if (find(_req_matrix[crs].begin(), _req_matrix[crs].end(), *c) != _req_matrix[crs].end())
+			{//crs is a pre-requisite to c 
+				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr_itr->first)); //add c to a list of courses to be deferred
+			}
+		}
+	}
+	if (!test_qtr_crses->empty())
+	{//quarter under consideration have courses already assigned to it
+
+		for (auto c = test_qtr_crses->begin(); c != test_qtr_crses->end(); c++)
+		{
+			if (find(_req_matrix[*c].begin(), _req_matrix[*c].end(), crs) != _req_matrix[*c].end())
+			{ //c is a pre-requisite to crs
+				add_crs = false; //do not add crs to this quarter
+				break;
+			}
+			else if (find(_req_matrix[crs].begin(), _req_matrix[crs].end(), *c) != _req_matrix[crs].end())
+			{//crs is a pre-requisite to c 
+				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr)); //add c to a list of courses to be deferred
+			}
+		}
+
+	}
+
+	if (add_crs)
+	{
+		//add crs to current quarter
+		test_qtr_crses->push_back(crs);
+		crs->isQueued1 = true;
+
+	}
+	else
+	{
+		//if crs is not going to be added, include it in the deference list
+		crs_for_deference.push_back(pair<AugNode*, QuarterNode>(crs, qtr));
+	}
+	for (auto deferee = crs_for_deference.begin(); deferee != crs_for_deference.end(); deferee++)
+	{
+		//remove from quarter chain
+		vector<AugNode*>& qtr_crses = qtr_chain[deferee->second];
+		qtr_crses.erase(find(qtr_crses.begin(), qtr_crses.end(), deferee->first));
+		//cycle to next placeable quarter
+		place_crs_in_chain(qtr_chain, deferee->first, get_crs_next_feasible_qtr(deferee->first, deferee->second));
+	}
+}
+
+
+vector<DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map_input, QuarterNode start_qtr)
+{
+	AugNode* target_crs = get_target_with_shortest_path(paths_map_input);
+	vector<DegreePlan> output;
+	for (auto path = paths_map_input[target_crs].begin(); path != paths_map_input[target_crs].end(); path++)
+	{
+		map<AugNode*, CourseMatrix> paths_map = paths_map_input; //create a fresh copy to reset isQueued flags
+		vector<AugNode*> merged_crses = { target_crs }; //list of target courses merged into this generated path
+		DegreePlan qtr_chain = chain_end_courses(paths_map, start_qtr); //fresh output copy
+		int query_crs_index = 1;
+		for (auto query_crs = path->begin() + 1; query_crs != path->end(); query_crs++) //starting from node n-1
+		{
+			if (merged_crses.size() < paths_map_input.size())
+			{
+				//only run if all target paths have not been fully merged
+				for (auto target = paths_map.begin(); target != paths_map.end(); target++)
+				{
+					if (find(merged_crses.begin(), merged_crses.end(), target->first) == merged_crses.end())
+					{
+						//only do this for courses that have not been fully merged
+						int curr_index_offset = 0;
+						AugNode* matching_crs = nullptr;
+						int matching_crs_index = -1;
+						vector<AugNode*> test_path;
+
+						do {
+							int i = 0;
+							do {
+								test_path = target->second[i++];
+								if ((query_crs_index + curr_index_offset) < test_path.size())
+								{
+									matching_crs_index = query_crs_index + curr_index_offset;
+									matching_crs = test_path[matching_crs_index];
+								}
+							} while (matching_crs != *query_crs &&  i < target->second.size());
+							curr_index_offset++;
+							//while no match found and the longest path (path at the bottom of the list of paths) have not been exhaustively transversed
+						} while (matching_crs != *query_crs && ((query_crs_index + curr_index_offset) < target->second.back().size()));
+
+						vector<AugNode*> connector = { *query_crs };
+						if (matching_crs != *query_crs)
+						{
+							//no connection point found
+							test_path = target->second[0]; //set path to merge as shortest path 
+							connector[0] = test_path[0];
+						}
+						else
+						{
+							//found a connection point
+							merged_crses.push_back(target->first);
+						}
+						for (int i = matching_crs_index + 1; i < test_path.size() - 1; i++)
+						{
+							//add courses between connection point and target
+							connector.push_back(test_path[i]);
+						}
+						merge_paths_into_qtr_chain(qtr_chain, connector, start_qtr.year);
+					}
+
+				}
+				query_crs_index--;
+			}
+		}
+	
+		merge_paths_into_qtr_chain(qtr_chain, *path, start_qtr.year);
+		//emit new plan
+		output.push_back(qtr_chain);
+	}
+	return output;
 }
 
