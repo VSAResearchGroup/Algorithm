@@ -74,9 +74,9 @@ struct QuarterNode
 	QuarterNode next_qtr();
 
 
-	bool operator !=(const QuarterNode& rhs);
+	bool operator !=(const QuarterNode& rhs) const;
 
-	bool operator ==(const QuarterNode& rhs);
+	bool operator ==(const QuarterNode& rhs) const;
 
 	bool operator <(const QuarterNode& rhs) const;
 

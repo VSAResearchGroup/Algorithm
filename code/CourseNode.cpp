@@ -23,12 +23,12 @@ QuarterNode QuarterNode::next_qtr()
 }
 
 
-bool QuarterNode::operator != (const QuarterNode& rhs)
+bool QuarterNode::operator != (const QuarterNode& rhs) const
 {
 	return (static_cast<int>(quarter) != static_cast<int>(rhs.quarter)) || (year != rhs.year);
 }
 
-bool QuarterNode::operator ==(const QuarterNode& rhs)
+bool QuarterNode::operator ==(const QuarterNode& rhs) const
 {
 	return (static_cast<int>(quarter) == static_cast<int>(rhs.quarter)) && (year == rhs.year);
 }

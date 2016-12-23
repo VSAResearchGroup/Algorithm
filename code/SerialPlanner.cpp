@@ -321,6 +321,72 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 	}
 }
 
+void SerialPlanner::resolve_clashes(vector<DegreePlan>& plans)
+{
+	for (auto plan = plans.begin(); plan != plans.end(); plan++)
+	{
+		reorder_for_clash(plans, *plan,0,true);
+	}
+}
+
+void SerialPlanner::reorder_for_clash(vector<DegreePlan>& plans, DegreePlan& single_plan, int start_index, bool is_included)
+{
+	bool remove_plan = false;
+	DegreePlan::iterator qtr_start = single_plan.begin();
+	int offset = 0;
+	while (offset++ < start_index)
+	{
+		qtr_start++;
+	}
+	for (auto qtr = qtr_start; qtr != single_plan.end(); qtr++)
+	{
+		int size = static_cast<int>(qtr->second.size());
+		for (int i = 0; i < size - 1; i++)
+		{
+			bool found_overlap = false;
+			for (int j = i + 1; j < size; j++)
+			{
+				//check if a course overlaps with another
+				AugNode* crs1 = qtr->second[i];
+				AugNode* crs2 = qtr->second[j];
+				if (crs1->course->days == crs2->course->days)
+				{
+					if (crs1->course->schedule.second > crs2->course->schedule.first &&
+						crs1->course->schedule.first <= crs2->course->schedule.second)
+					{
+						found_overlap = true;
+						remove_plan = is_included;
+						//option 1: defer crs 1 with new plan emerging		
+						DegreePlan new_plan1 = single_plan;		
+						new_plan1[qtr->first].erase(new_plan1[qtr->first].begin() + i);
+						merge_paths_into_qtr_chain(new_plan1, { crs1 }, qtr->first.year + 1);
+						reorder_for_clash(plans, new_plan1, start_index, false);
+						//option 2: defer crs 2 with another new plan emerging
+						DegreePlan new_plan2 = single_plan;
+						new_plan2[qtr->first].erase(new_plan2[qtr->first].begin() + j);
+						merge_paths_into_qtr_chain(new_plan2, { crs2 }, qtr->first.year + 1);
+						reorder_for_clash(plans, new_plan2, start_index, false);
+						break;
+					}
+				}
+			}
+			if (found_overlap)
+			{
+				break;
+			}
+			
+		}
+		start_index ++;
+	}
+	if (remove_plan)
+	{
+		plans.erase(find(plans.begin(),plans.end(),single_plan));
+	}
+	else if (!is_included)
+	{
+		plans.push_back(single_plan);
+	}
+}
 
 vector<DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map_input, QuarterNode start_qtr)
 {
@@ -390,6 +456,8 @@ vector<DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map_
 		//emit new plan
 		output.push_back(qtr_chain);
 	}
+	//resolve all class periods overlap
+	resolve_clashes(output);
 	return output;
 }
 

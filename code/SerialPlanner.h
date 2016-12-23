@@ -14,9 +14,12 @@ private:
 	void merge_paths_into_qtr_chain(DegreePlan& qtr_chain, vector<AugNode*> path, ushort year);
 	void place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, QuarterNode qtr);
 	AugNode* get_target_with_shortest_path(map<AugNode*, CourseMatrix>& paths_map);
+	void resolve_clashes(vector<DegreePlan>& plans);
+	void reorder_for_clash(vector<DegreePlan>& plans, DegreePlan& single_plan, int start_index,bool is_included);
 public:
 	map<AugNode*, CourseMatrix> phase1(vector<AugNode*>& startNodes, vector<AugNode*>& endNodes);
 	vector<DegreePlan> phase2(map<AugNode*, CourseMatrix>& input, QuarterNode start_qtr);
+	
 
 	
 
