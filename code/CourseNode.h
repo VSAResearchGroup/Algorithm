@@ -84,7 +84,10 @@ struct QuarterNode
 
 
 
-
+//gets the next possible quarter a course can be taken after the current quarter
+//crs: pointer to a course and its details
+//curr_qtr: current quarter under consideration
+//RETURNS: the next possible quarter, e.g. a course taken only in FALL 2016 will return FALL 2017
 QuarterNode get_crs_next_feasible_qtr(AugNode* crs, QuarterNode curr_qtr);
 
 #endif
