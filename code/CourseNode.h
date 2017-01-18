@@ -33,8 +33,8 @@ struct CourseNode
 	std::vector<QUARTER> quarters;
 	std::pair<int, int> schedule;
 	std::vector<DAY_OF_WEEK> days;
-	std::vector<AugNode*> postreq_nodes;
-	std::vector<AugNode*> prereq_nodes;
+	std::vector<std::pair<bool,AugNode*>> postreq_nodes;
+	std::vector<std::pair<bool, AugNode*>> prereq_nodes;
 
 	CourseNode(int code,std::vector<QUARTER> quarter,std::pair<int,int> schedule,std::vector<DAY_OF_WEEK> days): course_code(code),quarters(quarter),schedule(schedule),days(days) {}
 };
@@ -50,6 +50,8 @@ struct Probe
 	std::vector<AugNode*> path;
 	int originCrs;
 };
+
+
 
 struct AugNode
 {

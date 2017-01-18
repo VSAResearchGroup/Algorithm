@@ -23,7 +23,7 @@ void SerialPlanner::augment_graph(vector<AugNode*>& endNodes)
 		q.pop();
 		for (auto node = currNode->course->postreq_nodes.begin(); node != currNode->course->postreq_nodes.end(); node++)
 		{
-			AugNode* nd = *node;
+			AugNode* nd = node->second;
 
 			for (auto distCell = nd->distances.begin(); distCell != nd->distances.end(); distCell++)
 			{
@@ -37,10 +37,10 @@ void SerialPlanner::augment_graph(vector<AugNode*>& endNodes)
 
 		for (auto node = currNode->course->prereq_nodes.begin(); node != currNode->course->prereq_nodes.end(); node++)
 		{
-			AugNode* nd = *node;
+			AugNode* nd = node->second;
 			if (!nd->isQueued1)
 			{
-				q.push(*node);
+				q.push(nd);
 				nd->isQueued1 = true;
 			}
 		}
@@ -64,7 +64,7 @@ void SerialPlanner::probe_graph(vector<AugNode*>& startNodes, vector<AugNode*>& 
 			Probe probe;
 			probe.originCrs = en->course->course_code;
 			probe.path.push_back(en);
-			AugNode* pre_req = *node;
+			AugNode* pre_req = node->second;
 			pre_req->currProbes.push_back(probe);
 			if (!pre_req->isQueued2)
 			{
@@ -123,7 +123,7 @@ void SerialPlanner::probe_graph(vector<AugNode*>& startNodes, vector<AugNode*>& 
 				Probe prb = *probe;
 				for (auto pre_req = node->course->prereq_nodes.begin(); pre_req != node->course->prereq_nodes.end(); pre_req++)
 				{
-					AugNode* prq = *pre_req;
+					AugNode* prq = pre_req->second;
 					for (auto ndp = prq->distances.begin(); ndp != prq->distances.end(); ndp++)
 					{
 						NDPair& dp = *ndp;
@@ -174,7 +174,7 @@ void SerialPlanner::scan_and_add(AugNode* crs, vector<AugNode*>& parents)
 	{
 		crs->isQueued1 = false;
 		crs->isQueued2 = false;
-		_req_matrix.insert(pair<AugNode*, vector<AugNode*>>(crs, vector<AugNode*>()));
+		_req_matrix.insert(pair<AugNode*, vector<pair<bool,AugNode*>>>(crs, vector<pair<bool,AugNode*>>()));
 
 		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
 		{
@@ -191,7 +191,8 @@ void SerialPlanner::scan_and_add(AugNode* crs, vector<AugNode*>& parents)
 		}
 		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
 		{
-			scan_and_add(*scan_crs, parents);
+			scan_and_add(scan_crs->second, parents);
+	
 		}
 	}
 }
@@ -275,10 +276,15 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 	{
 		for (auto c = qtr_itr->second.begin(); c != qtr_itr->second.end(); c++)
 		{
-			if (find(_req_matrix[crs].begin(), _req_matrix[crs].end(), *c) != _req_matrix[crs].end())
-			{//crs is a pre-requisite to c 
+			AugNode* c_val = *c;
+			auto req_ptr = find_if(_req_matrix[crs].begin(), _req_matrix[crs].end(), [&c_val](const pair<bool, AugNode*> entry) {
+				return entry.second->course->course_code == c_val->course->course_code;
+			});
+			if (req_ptr != _req_matrix[crs].end() && !req_ptr->first)
+			{//crs is a pre-requisite and not a co-requisite to c 
 				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr_itr->first)); //add c to a list of courses to be deferred
 			}
+			
 		}
 	}
 	if (!test_qtr_crses->empty())
@@ -286,13 +292,20 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 
 		for (auto c = test_qtr_crses->begin(); c != test_qtr_crses->end(); c++)
 		{
-			if (find(_req_matrix[*c].begin(), _req_matrix[*c].end(), crs) != _req_matrix[*c].end())
-			{ //c is a pre-requisite to crs
+			auto req_ptr = find_if(_req_matrix[*c].begin(), _req_matrix[*c].end(), [&crs](const pair<bool, AugNode*>& entry) {
+				return entry.second->course->course_code == crs->course->course_code;
+			});
+			AugNode* c_val = *c;
+			auto rev_req_ptr = find_if(_req_matrix[crs].begin(), _req_matrix[crs].end(), [&c_val](const pair<bool, AugNode*>& entry){
+				return entry.second->course->course_code == c_val->course->course_code;
+			});
+			if (req_ptr != _req_matrix[*c].end() && !req_ptr->first)
+			{ //c is a pre-requisite and not a co-requisite to crs
 				add_crs = false; //do not add crs to this quarter
 				break;
 			}
-			else if (find(_req_matrix[crs].begin(), _req_matrix[crs].end(), *c) != _req_matrix[crs].end())
-			{//crs is a pre-requisite to c 
+			else if (rev_req_ptr != _req_matrix[crs].end() && !rev_req_ptr->first)
+			{//crs is a pre-requisite and not a co-requisite to c 
 				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr)); //add c to a list of courses to be deferred
 			}
 		}

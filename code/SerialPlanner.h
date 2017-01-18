@@ -7,7 +7,7 @@ class SerialPlanner : public IPlanner
 {
 private:
 	//a requisite matrix in form of a key-value pair where every course maps to its post-requisites
-	map<AugNode*, vector<AugNode*>> _req_matrix;
+	map<AugNode*, vector<pair<bool,AugNode*>>> _req_matrix;
 
 	//Populates requisite network with additional data needed to aid transversal
 	//endNodes: a reference to the list of intended target courses from which the network augmentation begins
