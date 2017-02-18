@@ -49,6 +49,9 @@ private:
 	//paths_map: a reference to the output from phase 1
 	AugNode* get_target_with_shortest_path(map<AugNode*, CourseMatrix>& paths_map);
 
+	//resets the boolean flags that determines if a course has been included in a tentative degree plan
+	void reset_queued_flags();
+
 	//generate new plans in situations where quarters contain courses with schedule clashes
 	//plans: a reference to the list of generated degree plans
 	void resolve_clashes(vector<DegreePlan>& plans);

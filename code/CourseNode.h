@@ -3,6 +3,9 @@
 
 
 #include <vector>
+#include <map>
+
+using namespace std;
 
 
 
@@ -27,16 +30,21 @@ enum DAY_OF_WEEK
 	FRI = 5
 };
 
+struct schedule
+{
+	DAY_OF_WEEK day;
+	pair<int, int> time;
+};
+
 struct CourseNode
 {
 	int course_code;
-	std::vector<QUARTER> quarters;
-	std::pair<int, int> schedule;
-	std::vector<DAY_OF_WEEK> days;
-	std::vector<std::pair<bool,AugNode*>> postreq_nodes;
-	std::vector<std::pair<bool, AugNode*>> prereq_nodes;
+	vector<QUARTER> quarters;
+	vector<schedule> schedules;
+	vector<pair<bool,AugNode*>> postreq_nodes;
+	vector<pair<bool, AugNode*>> prereq_nodes;
 
-	CourseNode(int code,std::vector<QUARTER> quarter,std::pair<int,int> schedule,std::vector<DAY_OF_WEEK> days): course_code(code),quarters(quarter),schedule(schedule),days(days) {}
+	CourseNode(int code,vector<QUARTER> quarter,vector<schedule> schedules): course_code(code),quarters(quarter),schedules(schedules) {}
 };
 
 struct NDPair
@@ -47,7 +55,7 @@ struct NDPair
 
 struct Probe
 {
-	std::vector<AugNode*> path;
+	vector<AugNode*> path;
 	int originCrs;
 };
 
@@ -56,8 +64,8 @@ struct Probe
 struct AugNode
 {
 	CourseNode* course;
-	std::vector<NDPair> distances;
-	std::vector<Probe> currProbes;
+	vector<NDPair> distances;
+	vector<Probe> currProbes;
 	bool isQueued1; //to prevent recomputations
 	bool isQueued2; 
 	AugNode(CourseNode* course) :course(course), isQueued1(false), isQueued2(false){}
@@ -92,4 +100,8 @@ struct QuarterNode
 //RETURNS: the next possible quarter, e.g. a course taken only in FALL 2016 will return FALL 2017
 QuarterNode get_crs_next_feasible_qtr(AugNode* crs, QuarterNode curr_qtr);
 
+
+typedef vector<vector<AugNode*>> CourseMatrix;
+typedef unsigned short ushort;
+typedef map<QuarterNode, vector<AugNode*>> DegreePlan;
 #endif

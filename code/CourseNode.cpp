@@ -56,6 +56,7 @@ QuarterNode get_crs_next_feasible_qtr(AugNode* crs, QuarterNode curr_qtr)
 		//cycle back to the first
 		output.quarter = crs->course->quarters[0];
 		output.year++;
+		return output;
 	}
 	else
 	{

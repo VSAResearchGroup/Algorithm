@@ -9,9 +9,7 @@
 
 using namespace std;
 
-typedef vector<vector<AugNode*>> CourseMatrix;
-typedef unsigned short ushort;
-typedef map<QuarterNode, vector<AugNode*>> DegreePlan;
+
 //an interface that defines a course planner algorithm
 class IPlanner
 {

@@ -1,0 +1,2347 @@
+[
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2020
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": [
+                    {
+                        "CourseId": 505,
+                        "Schedules": [
+                            [
+                                47,
+                                55,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 502,
+                        "Schedules": [
+                            [
+                                65,
+                                73,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2020
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 452,
+                        "Schedules": [
+                            [
+                                69,
+                                77,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 505,
+                        "Schedules": [
+                            [
+                                47,
+                                55,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2020
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    },
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 907,
+                        "Schedules": [
+                            [
+                                77,
+                                85,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 902,
+                        "Schedules": [
+                            [
+                                65,
+                                73,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 505,
+                        "Schedules": [
+                            [
+                                47,
+                                55,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 230,
+                        "Schedules": [
+                            [
+                                70,
+                                78,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 892,
+                        "Schedules": [
+                            [
+                                69,
+                                77,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 902,
+                        "Schedules": [
+                            [
+                                65,
+                                73,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 505,
+                        "Schedules": [
+                            [
+                                47,
+                                55,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    },
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 907,
+                        "Schedules": [
+                            [
+                                77,
+                                85,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 905,
+                        "Schedules": [
+                            [
+                                62,
+                                70,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 906,
+                        "Schedules": [
+                            [
+                                64,
+                                72,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 916,
+                        "Schedules": [
+                            [
+                                72,
+                                80,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2023
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2024
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    },
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 907,
+                        "Schedules": [
+                            [
+                                77,
+                                85,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 902,
+                        "Schedules": [
+                            [
+                                65,
+                                73,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 906,
+                        "Schedules": [
+                            [
+                                64,
+                                72,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 916,
+                        "Schedules": [
+                            [
+                                72,
+                                80,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2023
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 230,
+                        "Schedules": [
+                            [
+                                70,
+                                78,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 892,
+                        "Schedules": [
+                            [
+                                69,
+                                77,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 905,
+                        "Schedules": [
+                            [
+                                62,
+                                70,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 906,
+                        "Schedules": [
+                            [
+                                64,
+                                72,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 916,
+                        "Schedules": [
+                            [
+                                72,
+                                80,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2023
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2023
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2024
+            }
+        ]
+    },
+    {
+        "Quarters": [
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2016
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 918,
+                        "Schedules": [
+                            [
+                                40,
+                                48,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 230,
+                        "Schedules": [
+                            [
+                                70,
+                                78,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 892,
+                        "Schedules": [
+                            [
+                                69,
+                                77,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2017
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2017
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 897,
+                        "Schedules": [
+                            [
+                                60,
+                                68,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 901,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 2,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 902,
+                        "Schedules": [
+                            [
+                                65,
+                                73,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2018
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 906,
+                        "Schedules": [
+                            [
+                                64,
+                                72,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2018
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 3,
+                "Year": 2019
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 916,
+                        "Schedules": [
+                            [
+                                72,
+                                80,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2019
+            },
+            {
+                "Courses": null,
+                "Quarter": 1,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 917,
+                        "Schedules": [
+                            [
+                                33,
+                                41,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2020
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2020
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 921,
+                        "Schedules": [
+                            [
+                                41,
+                                49,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 922,
+                        "Schedules": [
+                            [
+                                44,
+                                52,
+                                1
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2021
+            },
+            {
+                "Courses": null,
+                "Quarter": 4,
+                "Year": 2021
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 924,
+                        "Schedules": [
+                            [
+                                48,
+                                56,
+                                4
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2022
+            },
+            {
+                "Courses": null,
+                "Quarter": 2,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 913,
+                        "Schedules": [
+                            [
+                                61,
+                                69,
+                                3
+                            ],
+                            [
+                                64,
+                                72,
+                                1
+                            ],
+                            [
+                                55,
+                                63,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 3,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 926,
+                        "Schedules": [
+                            [
+                                55,
+                                63,
+                                5
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 4,
+                "Year": 2022
+            },
+            {
+                "Courses": [
+                    {
+                        "CourseId": 914,
+                        "Schedules": [
+                            [
+                                71,
+                                79,
+                                2
+                            ]
+                        ]
+                    }
+                ],
+                "Quarter": 1,
+                "Year": 2023
+            }
+        ]
+    }
+]

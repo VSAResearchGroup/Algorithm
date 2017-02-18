@@ -1,5 +1,7 @@
 #include "SerialPlanner.h"
 #include <queue>
+#include <set>
+
 
 
 void SerialPlanner::augment_graph(vector<AugNode*>& endNodes)
@@ -168,8 +170,17 @@ void SerialPlanner::build_req_matrix(vector<AugNode*>& startNodes)
 	}
 }
 
+void SerialPlanner::reset_queued_flags()
+{
+	for (auto& crs : _req_matrix)
+	{
+		crs.first->isQueued1 = false;
+	}
+}
+
 void SerialPlanner::scan_and_add(AugNode* crs, vector<AugNode*>& parents)
 {
+
 	if (_req_matrix.find(crs) == _req_matrix.end())
 	{
 		crs->isQueued1 = false;
@@ -178,22 +189,31 @@ void SerialPlanner::scan_and_add(AugNode* crs, vector<AugNode*>& parents)
 
 		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
 		{
-			_req_matrix[crs].push_back(*scan_crs);
-			for (auto prt = parents.begin(); prt != parents.end(); prt++)
-			{
-				_req_matrix[*prt].push_back(*scan_crs);
-			}
-
-		}
-		if (!crs->course->postreq_nodes.empty())
-		{
 			parents.push_back(crs);
+			auto child = _req_matrix.find((*scan_crs).second);
+			if (child != _req_matrix.end())
+			{
+				/* child course has been added, hence copy all of childs node post req into parent, and dont bother to recurse on 
+				this iteration */
+				for (auto& prt : parents)
+				{
+					_req_matrix[prt].push_back(pair<bool,AugNode*>(scan_crs->first,child->first));
+					_req_matrix[prt].insert(_req_matrix[prt].end(), child->second.begin(), child->second.end());
+		
+				}
+			}
+			else {
+				for (auto& prt : parents)
+				{
+					_req_matrix[prt].push_back(*scan_crs);
+				}
+
+				scan_and_add(scan_crs->second, parents);
+			}
+			parents.pop_back();
 		}
-		for (auto scan_crs = crs->course->postreq_nodes.begin(); scan_crs != crs->course->postreq_nodes.end(); scan_crs++)
-		{
-			scan_and_add(scan_crs->second, parents);
-	
-		}
+		
+		
 	}
 }
 
@@ -269,9 +289,10 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 	test_qtr_crses = &qtr_chain[qtr];
 
 	bool add_crs = true;
-	vector<pair<AugNode*, QuarterNode>> crs_for_deference;
+	set<pair<AugNode*, QuarterNode>> crs_for_deference; //using set to avoid duplicate entries in the deferrence list
 	auto test_qtr_itr = qtr_chain.find(qtr);
 
+	//check all quarters before current quarter under consideration
 	for (auto qtr_itr = qtr_chain.begin(); qtr_itr != test_qtr_itr; qtr_itr++)
 	{
 		for (auto c = qtr_itr->second.begin(); c != qtr_itr->second.end(); c++)
@@ -282,7 +303,7 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 			});
 			if (req_ptr != _req_matrix[crs].end() && !req_ptr->first)
 			{//crs is a pre-requisite and not a co-requisite to c 
-				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr_itr->first)); //add c to a list of courses to be deferred
+				crs_for_deference.insert(pair<AugNode*, QuarterNode>(*c, qtr_itr->first)); //add c to a list of courses to be deferred
 			}
 			
 		}
@@ -306,7 +327,8 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 			}
 			else if (rev_req_ptr != _req_matrix[crs].end() && !rev_req_ptr->first)
 			{//crs is a pre-requisite and not a co-requisite to c 
-				crs_for_deference.push_back(pair<AugNode*, QuarterNode>(*c, qtr)); //add c to a list of courses to be deferred
+				
+				crs_for_deference.insert(pair<AugNode*, QuarterNode>(*c, qtr)); //add c to a list of courses to be deferred
 			}
 		}
 
@@ -315,6 +337,7 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 	if (add_crs)
 	{
 		//add crs to current quarter
+
 		test_qtr_crses->push_back(crs);
 		crs->isQueued1 = true;
 
@@ -322,16 +345,28 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, AugNode* crs, Quar
 	else
 	{
 		//if crs is not going to be added, include it in the deference list
-		crs_for_deference.push_back(pair<AugNode*, QuarterNode>(crs, qtr));
+		crs_for_deference.insert(pair<AugNode*, QuarterNode>(crs, qtr));
 	}
 	for (auto deferee = crs_for_deference.begin(); deferee != crs_for_deference.end(); deferee++)
 	{
-		//remove from quarter chain
+		//clean up deferred courses from current quarter chain
 		vector<AugNode*>& qtr_crses = qtr_chain[deferee->second];
-		qtr_crses.erase(find(qtr_crses.begin(), qtr_crses.end(), deferee->first));
+		auto remove = find(qtr_crses.begin(), qtr_crses.end(), deferee->first); 
+		if (remove != qtr_crses.end())
+		{ //remove if present
+			qtr_crses.erase(remove);
+		}
+	
+		
+	}
+	for (auto deferee = crs_for_deference.begin(); deferee != crs_for_deference.end(); deferee++)
+	{
 		//cycle to next placeable quarter
 		place_crs_in_chain(qtr_chain, deferee->first, get_crs_next_feasible_qtr(deferee->first, deferee->second));
+
+
 	}
+	
 }
 
 void SerialPlanner::resolve_clashes(vector<DegreePlan>& plans)
@@ -362,26 +397,38 @@ void SerialPlanner::reorder_for_clash(vector<DegreePlan>& plans, DegreePlan& sin
 				//check if a course overlaps with another
 				AugNode* crs1 = qtr->second[i];
 				AugNode* crs2 = qtr->second[j];
-				if (crs1->course->days == crs2->course->days)
+				for (schedule& sch1 : crs1->course->schedules)
 				{
-					if (crs1->course->schedule.second > crs2->course->schedule.first &&
-						crs1->course->schedule.first <= crs2->course->schedule.second)
+					for (schedule& sch2 : crs2->course->schedules)
 					{
-						found_overlap = true;
-						remove_plan = is_included;
-						//option 1: defer crs 1 with new plan emerging		
-						DegreePlan new_plan1 = single_plan;		
-						new_plan1[qtr->first].erase(new_plan1[qtr->first].begin() + i);
-						merge_paths_into_qtr_chain(new_plan1, { crs1 }, qtr->first.year + 1);
-						reorder_for_clash(plans, new_plan1, start_index, false);
-						//option 2: defer crs 2 with another new plan emerging
-						DegreePlan new_plan2 = single_plan;
-						new_plan2[qtr->first].erase(new_plan2[qtr->first].begin() + j);
-						merge_paths_into_qtr_chain(new_plan2, { crs2 }, qtr->first.year + 1);
-						reorder_for_clash(plans, new_plan2, start_index, false);
+						if (sch1.day == sch2.day)
+						{
+							if (sch1.time.second > sch2.time.first &&
+								sch1.time.first <= sch2.time.second)
+							{
+								found_overlap = true;
+								remove_plan = is_included;
+								//option 1: defer crs 1 with new plan emerging		
+								DegreePlan new_plan1 = single_plan;
+								new_plan1[qtr->first].erase(new_plan1[qtr->first].begin() + i);
+								merge_paths_into_qtr_chain(new_plan1, { crs1 }, qtr->first.year + 1);
+								reorder_for_clash(plans, new_plan1, start_index, false);
+								//option 2: defer crs 2 with another new plan emerging
+								DegreePlan new_plan2 = single_plan;
+								new_plan2[qtr->first].erase(new_plan2[qtr->first].begin() + j);
+								merge_paths_into_qtr_chain(new_plan2, { crs2 }, qtr->first.year + 1);
+								reorder_for_clash(plans, new_plan2, start_index, false);
+								break;
+							}
+						}
+					}
+
+					if (found_overlap)
+					{
 						break;
 					}
 				}
+			
 			}
 			if (found_overlap)
 			{
@@ -407,23 +454,23 @@ vector<DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map_
 	vector<DegreePlan> output;
 	for (auto path = paths_map_input[target_crs].begin(); path != paths_map_input[target_crs].end(); path++)
 	{
-		map<AugNode*, CourseMatrix> paths_map = paths_map_input; //create a fresh copy to reset isQueued flags
+		reset_queued_flags();  //reset isQueued flags
 		vector<AugNode*> merged_crses = { target_crs }; //list of target courses merged into this generated path
-		DegreePlan qtr_chain = chain_end_courses(paths_map, start_qtr); //fresh output copy
+		DegreePlan qtr_chain = chain_end_courses(paths_map_input, start_qtr); //fresh output copy
 		int query_crs_index = 1;
 		for (auto query_crs = path->begin() + 1; query_crs != path->end(); query_crs++) //starting from node n-1
 		{
 			if (merged_crses.size() < paths_map_input.size())
 			{
 				//only run if all target paths have not been fully merged
-				for (auto target = paths_map.begin(); target != paths_map.end(); target++)
+				for (auto target = paths_map_input.begin(); target != paths_map_input.end(); target++)
 				{
 					if (find(merged_crses.begin(), merged_crses.end(), target->first) == merged_crses.end())
 					{
 						//only do this for courses that have not been fully merged
 						int curr_index_offset = 0;
 						AugNode* matching_crs = nullptr;
-						int matching_crs_index = -1;
+						int matching_crs_index = 0;
 						vector<AugNode*> test_path;
 
 						do {
@@ -445,14 +492,14 @@ vector<DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map_
 						{
 							//no connection point found
 							test_path = target->second[0]; //set path to merge as shortest path 
-							connector[0] = test_path[0];
+							connector[0] = test_path[1];
 						}
 						else
 						{
 							//found a connection point
 							merged_crses.push_back(target->first);
 						}
-						for (int i = matching_crs_index + 1; i < test_path.size() - 1; i++)
+						for (int i = matching_crs_index + 1; i < test_path.size(); i++)
 						{
 							//add courses between connection point and target
 							connector.push_back(test_path[i]);
