@@ -10,7 +10,7 @@ using namespace std;
 typedef pair<vector<AugNode*>, vector<AugNode*>> CrsPairs;
 
 //a unified interface for string serializers and deserializers
-class Parser
+class Parser 
 {
 public:
 	//Parses input from serialized string to concrete c++ objects
@@ -19,7 +19,7 @@ public:
 
 	//Generates a serialized version of the degree plans
 	//output: a list of tentative degree plans C++ objects
-	virtual const string generate_output_str(map<int, DegreePlan>&  output) = 0;
+	virtual const string generate_output_str(map<int,DegreePlan>&  output) = 0;
 };
 
 

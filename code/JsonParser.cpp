@@ -6,12 +6,12 @@
 
 const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map<int, CourseNode*>* _crs_details)
 {
-
+	
 	json j_input = json::parse(input);
-	for (auto crs_itr = j_input[1].begin(); crs_itr != j_input[1].end(); crs_itr++)
+	for (auto crs_itr = j_input[1].begin(); crs_itr != j_input[1].end();crs_itr++)
 	{ //extract all course details and store in global map _crs_detauils
 		int crs_id = atoi(crs_itr.key().c_str());
-
+		
 		vector<QUARTER> quarters;
 		vector<schedule> schedules;
 		for (json& j_sch : crs_itr.value())
@@ -54,17 +54,17 @@ const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map
 			for (auto& crses : crs_chain)
 			{
 				AugNode* pathNode = new AugNode();
-
-				for (int i = 0; i < crses.size(); i++)
+		
+				for (int i=0; i < crses.size(); i++)
 				{
 					pathNode->course_ids.push_back(crses[i].get<uint32_t>());
 				}
 				for (int i = 0; i < temp.size(); i++)
 				{
-
+				
 					vector<int>* post_reqs = &(*_crs_details)[temp[i]]->post_reqs;
 					post_reqs->insert(post_reqs->end(), pathNode->course_ids.begin(), pathNode->course_ids.end());
-
+					
 				}
 
 				//add newly visited courses to the pre-req tree
@@ -77,7 +77,7 @@ const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map
 			}
 			//adding a built path to the list of target course's path
 			multiPaths.push_back(path);
-
+			
 		}
 		//adding all paths for a target course to phase 2's prospective input
 		paths.insert(pair<AugNode*, CourseMatrix>(target, multiPaths));
@@ -88,16 +88,16 @@ const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map
 
 int JsonParser::remap_qtr_for_output(QUARTER input)
 {
-	int q = (static_cast<int>(input) + 1) % 4;
+	int q = (static_cast<int>(input) + 1 )% 4;
 	if (q == 0)
 		return 4;
 	return q;
 }
 
-string const JsonParser::generate_output_str(map<int, DegreePlan>&  output)
+string const JsonParser::generate_output_str(map<int,DegreePlan>&  output)
 {
 	json j_out;
-
+	
 	for (auto& plan : output)
 	{
 		json j_plan;
@@ -105,14 +105,14 @@ string const JsonParser::generate_output_str(map<int, DegreePlan>&  output)
 		for (auto& qtr : plan.second)
 		{
 			json j_qtr;
-			j_qtr["Quarter"] = remap_qtr_for_output(qtr.first.quarter);
+			j_qtr["Quarter"] = remap_qtr_for_output(qtr.first.quarter); 
 			j_qtr["Year"] = qtr.first.year;
 			j_qtr["Courses"] = {};
 			for (auto& crs : qtr.second)
 			{
-
+			
 				j_qtr["Courses"].push_back(crs->course_code);
-
+				
 			}
 			j_plan["Quarters"].push_back(j_qtr);
 		}

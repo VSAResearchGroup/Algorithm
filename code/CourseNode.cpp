@@ -68,3 +68,20 @@ QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr)
 	}
 	return output;
 }
+
+
+
+assessment::assessment()
+{
+	//use 1.0 for now
+	max_budget_score.first = 1.0; 
+	max_credits_score.first = 1.0;
+	time_of_day_score.first = 1.0;
+}
+
+void assessment::compute_aggregate()
+{
+	aggregate = (max_budget_score.first * max_budget_score.second + max_credits_score.first * max_credits_score.second +
+		time_of_day_score.first * time_of_day_score.second) / (max_budget_score.first + max_credits_score.first +
+			time_of_day_score.first);
+}

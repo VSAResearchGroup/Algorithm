@@ -172,20 +172,16 @@ void generate_plans(const char* input, char* output, size_t len)
 	auto paths = parser->parse_input(input, _crs_details);
 
 	cout << "Graph built" << endl;
-	CoursePlanner planner(new SerialPlanner());
+	CoursePlanner planner(new SerialPlanner(_crs_details));
 
 	QuarterNode start_qtr;
 	start_qtr.quarter = FALL;
 	start_qtr.year = 2016;
-	auto plans = planner.planPhase2(paths, start_qtr, _crs_details);
-	//print_plans(plans);
+	auto plans = planner.planPhase2(paths, start_qtr,TIME_OF_DAY::DAY,10,3500);
+	
 	string json_result = parser->generate_output_str(plans);
 	delete parser;
-	cout << "JSON Output: " << json_result << endl;
-	fstream fs;
-	fs.open("output.json", fstream::in | fstream::out | fstream::trunc);
-	fs << json_result;
-	fs.close();
+	strcpy_s(output, len, json_result.c_str());
 	cout << "Phase 2 Completed" << endl;
 	clean_up(&paths, _crs_details);
 

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-
+ 
 
 
 struct AugNode;
@@ -23,20 +23,22 @@ typedef map<QuarterNode, vector<CourseNode*>> DegreePlan;
 
 enum QUARTER
 {
-	WINTER = 1,
+	WINTER =1,
 	SPRING = 2,
-	SUMMER = 3,
+	SUMMER =3,
 	FALL = 4
 };
 
 enum DAY_OF_WEEK
 {
 	MON = 1,
-	TUE = 2,
-	WED = 3,
+	TUE =2,
+	WED =3,
 	THUR = 4,
 	FRI = 5
 };
+
+const int EVENING_MARKER = 68; //marks the integral value of time when evening classes starts
 
 struct schedule
 {
@@ -51,7 +53,7 @@ struct CourseNode
 	vector<schedule> schedules;
 	vector<int> post_reqs;
 	bool isQueued;
-	CourseNode(int code, vector<QUARTER> quarter, vector<schedule> schedules) : course_code(code), quarters(quarter), schedules(schedules), isQueued(false) {}
+	CourseNode(int code,vector<QUARTER> quarter,vector<schedule> schedules): course_code(code),quarters(quarter),schedules(schedules), isQueued(false) {}
 };
 
 
@@ -63,7 +65,7 @@ struct AugNode
 	vector<int> course_ids; //list course Ids
 
 	AugNode() {}
-	AugNode(vector<int> course_ids) :course_ids(course_ids) {}
+	AugNode(vector<int> course_ids) :course_ids(course_ids){}
 	~AugNode() { }
 };
 
@@ -95,6 +97,24 @@ struct QuarterNode
 //RETURNS: the next possible quarter, e.g. a course taken only in FALL 2016 will return FALL 2017
 QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr);
 
+enum TIME_OF_DAY
+{
+	DAY = 1,
+	EVENING =2,
+	BOTH = 3
+};
 
+
+//a structure that encapsulates the score of a plan in each dimension (from 0 -1) and their respective weights
+struct assessment
+{
+	pair<float,float> time_of_day_score;
+	pair<float, float> max_credits_score;
+	pair<float, float> max_budget_score;
+	float aggregate;
+
+	assessment();
+	void compute_aggregate();
+};
 
 #endif
