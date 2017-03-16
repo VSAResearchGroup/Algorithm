@@ -6,7 +6,8 @@ namespace PInvokeCSharp
 {
     class Program
     {
-       
+        [DllImport("PInvokeCPP.dll", EntryPoint = "print", CallingConvention =CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        static extern void print(string msg,StringBuilder dest, int n);
 
         [DllImport("RecEngine.dll", EntryPoint = "generate_plans", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         static extern void generate_plans(string input, StringBuilder plans, int len);

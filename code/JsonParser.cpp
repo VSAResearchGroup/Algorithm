@@ -2,142 +2,117 @@
 
 #include "JsonParser.h"
 
-JsonParser::JsonParser()
-{
-	
-}
 
-AugNode* JsonParser::parse_single_crs(json& j_crs)
+
+const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map<int, CourseNode*>* _crs_details)
 {
 
-	vector<QUARTER> quarters;
-	vector<schedule> schedules;
-	for (json& j_sch : j_crs["CourseSchedule"])
-	{
-		//avoid duplicate quarters
-		QUARTER qtr = QUARTER(j_sch[3].get<uint64_t>());
-		if (find(quarters.begin(), quarters.end(), qtr) == quarters.end())
-		{
-			quarters.push_back(qtr);
-		}
-
-		//schedule time markers
-		int fro = static_cast<int>(j_sch[0].get<uint64_t>());
-		int to = static_cast<int>(j_sch[1].get<uint64_t>());
-		DAY_OF_WEEK day = DAY_OF_WEEK(j_sch[2].get<uint64_t>());
-
-		schedule sch;
-		sch.day = day;
-		sch.time =pair<int, int>(fro, to);
-		schedules.push_back(sch);
-
-	}
-	int crs_id = static_cast<int>(j_crs["CourseId"].get<uint64_t>());
-	CourseNode* crs = new CourseNode(crs_id, quarters, schedules);
-	AugNode* crsNode = new AugNode(crs);
-	return crsNode;
-}
-
-const CrsPairs JsonParser::parse_input(const char* input)
-{
-	map<int, AugNode*> temp; //used for DP in construction of the pre-req network
-	vector<AugNode*> start_crses;
-	vector<AugNode*> target_crses;
 	json j_input = json::parse(input);
-	for (json& j_crs : j_input)
-	{
-		parse_all_recursive(j_crs, j_input, temp);
-	}
-	//find start and target courses
-	for (auto& crs : temp)
-	{
-		
-		if (crs.second->course->prereq_nodes.empty())
+	for (auto crs_itr = j_input[1].begin(); crs_itr != j_input[1].end(); crs_itr++)
+	{ //extract all course details and store in global map _crs_detauils
+		int crs_id = atoi(crs_itr.key().c_str());
+
+		vector<QUARTER> quarters;
+		vector<schedule> schedules;
+		for (json& j_sch : crs_itr.value())
 		{
-			//no pre-reqs (start course)
-			start_crses.push_back(crs.second);
+			//avoid duplicate quarters
+			QUARTER qtr = QUARTER(j_sch[3].get<uint32_t>());
+			if (find(quarters.begin(), quarters.end(), qtr) == quarters.end())
+			{
+				quarters.push_back(qtr);
+			}
+
+			//schedule time markers
+			int fro = j_sch[0].get<uint32_t>();
+			int to = j_sch[1].get<uint32_t>();
+			DAY_OF_WEEK day = DAY_OF_WEEK(j_sch[2].get<uint32_t>());
+
+			schedule sch;
+			sch.day = day;
+			sch.time = pair<int, int>(fro, to);
+			schedules.push_back(sch);
+
 		}
-		if (crs.second->course->postreq_nodes.empty())
-		{
-			//no post-reqs (target course)
-			target_crses.push_back(crs.second);
-		}
+
+		CourseNode* course = new CourseNode(crs_id, quarters, schedules); //memory will be reclaimed by caller
+		_crs_details->insert(pair<int, CourseNode*>(crs_id, course));
 	}
-	return CrsPairs(start_crses, target_crses);
+	//find paths
+	map<AugNode*, CourseMatrix> paths;
+	for (auto req_itr = j_input[0].begin(); req_itr != j_input[0].end(); req_itr++)
+	{
+		AugNode* target = new AugNode();
+		target->course_ids.push_back(atoi(req_itr.key().c_str()));
+		json pre_reqs = req_itr.value();
+		CourseMatrix multiPaths;
+		for (auto& prq : pre_reqs)
+		{
+			json crs_chain = prq["TargetList"];
+			vector<AugNode*> path;
+			vector<int> temp; //used for building requisite matrix
+			for (auto& crses : crs_chain)
+			{
+				AugNode* pathNode = new AugNode();
+
+				for (int i = 0; i < crses.size(); i++)
+				{
+					pathNode->course_ids.push_back(crses[i].get<uint32_t>());
+				}
+				for (int i = 0; i < temp.size(); i++)
+				{
+
+					vector<int>* post_reqs = &(*_crs_details)[temp[i]]->post_reqs;
+					post_reqs->insert(post_reqs->end(), pathNode->course_ids.begin(), pathNode->course_ids.end());
+
+				}
+
+				//add newly visited courses to the pre-req tree
+				for (int c : pathNode->course_ids)
+				{
+					temp.push_back(c);
+				}
+				//building a single path
+				path.push_back(pathNode);
+			}
+			//adding a built path to the list of target course's path
+			multiPaths.push_back(path);
+
+		}
+		//adding all paths for a target course to phase 2's prospective input
+		paths.insert(pair<AugNode*, CourseMatrix>(target, multiPaths));
+
+	}
+	return paths;
 }
 
-AugNode* JsonParser::parse_all_recursive(json& j_crs, json& all_crses, map<int, AugNode*>& temp)
+int JsonParser::remap_qtr_for_output(QUARTER input)
 {
-	cout << j_crs << endl<<endl;
-	int crs_id = static_cast<int>(j_crs["CourseId"].get<uint64_t>());
-	if (temp.find(crs_id) == temp.end())
-	{ //only parse recursively if it has not been parsed
-		AugNode* crsNode = parse_single_crs(j_crs);
-		temp.insert(pair<int, AugNode*>(crs_id, crsNode)); //add to the list of parsed courses
-		
-		for (json& pre_req : j_crs["Prerequisites"])
-		{
-			int pre_req_id = static_cast<int>(pre_req.get<uint64_t>());
-			for (json& j_pre_req : all_crses)
-			{
-				int id = static_cast<int>(j_pre_req["CourseId"].get<uint64_t>());
-				if (id == pre_req_id)
-				{
-					//found pre-requisite, then parse and chain it (false indicates not a co-requisite)
-					auto parsed_pre_req = pair<bool, AugNode*>(false, parse_all_recursive(j_pre_req, all_crses, temp));
-					crsNode->course->prereq_nodes.push_back(parsed_pre_req);
-					parsed_pre_req.second->course->postreq_nodes.push_back(pair<bool, AugNode*>(false,crsNode));
-					break;
-				}
-			}
-		}
-		for (json& co_req : j_crs["Corequisites"])
-		{
-			int co_req_id = static_cast<int>(co_req.get<uint64_t>());
-			for (json& j_co_req : all_crses)
-			{
-				int id = static_cast<int>(j_co_req["CourseId"].get<uint64_t>());
-				if (id == co_req_id)
-				{
-					//found co-requisite, then parse and chain it (true indicates a co-requisite)
-					auto parsed_co_req = pair<bool, AugNode*>(true, parse_all_recursive(j_co_req, all_crses, temp));
-					crsNode->course->prereq_nodes.push_back(parsed_co_req);
-					parsed_co_req.second->course->postreq_nodes.push_back(pair<bool, AugNode*>(true, crsNode));
-					break;
-				}
-			}
-		}
-
-		
-		return crsNode;
-	}
-	//return course directly from cache if it has been previously parsed
-	return temp[crs_id];
+	int q = (static_cast<int>(input) + 1) % 4;
+	if (q == 0)
+		return 4;
+	return q;
 }
 
-string const JsonParser::generate_output_str(vector<DegreePlan>&  output)
+string const JsonParser::generate_output_str(map<int, DegreePlan>&  output)
 {
 	json j_out;
-	
+
 	for (auto& plan : output)
 	{
 		json j_plan;
-		for (auto& qtr : plan)
+		j_plan["PlanId"] = plan.first;
+		for (auto& qtr : plan.second)
 		{
 			json j_qtr;
-			j_qtr["Quarter"] = static_cast<int>(qtr.first.quarter);
+			j_qtr["Quarter"] = remap_qtr_for_output(qtr.first.quarter);
 			j_qtr["Year"] = qtr.first.year;
 			j_qtr["Courses"] = {};
 			for (auto& crs : qtr.second)
 			{
-				json j_crs;
-				j_crs["CourseId"] = crs->course->course_code;
-				j_crs["Schedules"] = {};
-				for (auto& sch : crs->course->schedules)
-				{
-					j_crs["Schedules"].push_back({sch.time.first,sch.time.second,static_cast<int>(sch.day)});
-				}
-				j_qtr["Courses"].push_back(j_crs);
+
+				j_qtr["Courses"].push_back(crs->course_code);
+
 			}
 			j_plan["Quarters"].push_back(j_qtr);
 		}

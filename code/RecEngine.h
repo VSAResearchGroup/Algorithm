@@ -3,9 +3,7 @@
 
 #include "stdafx.h"
 void build_graph();
-void post_order_removal(AugNode* node);
-void clean_up(vector<AugNode*>& startNodes);
-void print_paths(map<AugNode*, CourseMatrix>& paths);
+void clean_up(map<AugNode*, CourseMatrix>* paths, map<int, CourseNode*>* _crs_details);
 void print_plans(vector<DegreePlan>& plans);
 
 extern "C"

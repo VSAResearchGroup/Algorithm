@@ -138,97 +138,55 @@ void build_graph()
 }
 
 
-void post_order_removal(AugNode* node)
+void clean_up(map<AugNode*, CourseMatrix>* paths, map<int, CourseNode*>* _crs_details)
 {
-	if (node == nullptr)
-		return;
-	for (auto nd = node->course->postreq_nodes.begin(); nd != node->course->postreq_nodes.end(); nd++)
+	for (auto it = paths->begin(); it != paths->end(); it++)
 	{
-		post_order_removal(nd->second);
-	}
-	node->course->postreq_nodes.clear();
-	delete node;
-	node = nullptr;
-}
-
-void clean_up(vector<AugNode*>& startNodes)
-{
-	for (auto node = startNodes.begin(); node != startNodes.end(); node++)
-	{
-		post_order_removal(*node);
-	}
-}
-
-void print_paths(map<AugNode*, CourseMatrix>& paths)
-{
-	for (auto endCrs = paths.begin(); endCrs != paths.end(); endCrs++)
-	{
-		cout << endCrs->first->course->course_code << endl<< "--------------" << endl;
-		for (auto crsPath = endCrs->second.begin(); crsPath != endCrs->second.end(); crsPath++)
+		CourseMatrix& matrix = it->second;
+		for (int i = 0; i < matrix.size(); i++)
 		{
-			for (auto crs = (*crsPath).rbegin(); crs != (*crsPath).rend(); crs++)
+			for (int j = 0; j < matrix[i].size(); j++)
 			{
-				cout << (*crs)->course->course_code << "-----";
+				delete matrix[i][j];
 			}
-			cout << endl;
 		}
-		cout << endl << endl << endl;
+		delete it->first;
 	}
+
+	for (auto it = _crs_details->begin(); it != _crs_details->end(); it++)
+	{
+		delete it->second;
+	}
+
+	delete _crs_details;
 }
 
-void print_plans(vector<DegreePlan>& plans)
-{
-	for (auto plan = plans.begin(); plan != plans.end(); plan++)
-	{
-		for (auto qtr = plan->begin(); qtr != plan->end(); qtr++)
-		{
-			switch (qtr->first.quarter)
-			{
-			case FALL:
-				cout << "FALL ";
-				break;
-			case WINTER:
-				cout << "WINTER ";
-				break;
-			case SPRING:
-				cout << "SPRING ";
-				break;
-			case SUMMER:
-				cout << "SUMMER ";
-				break;
-			}
-			cout << qtr->first.year << "(";
-			for (auto crs = qtr->second.begin(); crs != qtr->second.end(); crs++)
-			{
-				cout << (*crs)->course->course_code << ",";
-			}
-			cout <<") ";
-		}
-		cout << endl << endl;
-	}
-}
 
 void generate_plans(const char* input, char* output, size_t len)
 {
 
+	
 	Parser* parser = new JsonParser();
-	auto req_graph = parser->parse_input(input);
+
+	map<int, CourseNode*>* _crs_details = new map<int, CourseNode*>(); //holds all other course information like class schedules, etc
+	auto paths = parser->parse_input(input, _crs_details);
 
 	cout << "Graph built" << endl;
 	CoursePlanner planner(new SerialPlanner());
-	auto paths = planner.planPhase1(req_graph.first, req_graph.second);
-	cout << "Phase 1 Completed" << endl;
-	print_paths(paths);
+
 	QuarterNode start_qtr;
 	start_qtr.quarter = FALL;
 	start_qtr.year = 2016;
-	auto plans = planner.planPhase2(paths, start_qtr);
-	print_plans(plans);
+	auto plans = planner.planPhase2(paths, start_qtr, _crs_details);
+	//print_plans(plans);
 	string json_result = parser->generate_output_str(plans);
 	delete parser;
-	strcpy_s(output, len, json_result.c_str());
+	cout << "JSON Output: " << json_result << endl;
+	fstream fs;
+	fs.open("output.json", fstream::in | fstream::out | fstream::trunc);
+	fs << json_result;
+	fs.close();
 	cout << "Phase 2 Completed" << endl;
-	//clean_up(req_graph.first);
-	//cout << "Cleaned up" << endl;
+	clean_up(&paths, _crs_details);
 
 }

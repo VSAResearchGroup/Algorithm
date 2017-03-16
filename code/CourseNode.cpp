@@ -46,21 +46,21 @@ bool QuarterNode::operator <(const QuarterNode& rhs) const
 }
 
 
-QuarterNode get_crs_next_feasible_qtr(AugNode* crs, QuarterNode curr_qtr)
+QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr)
 {
-	int next_qtr_index = find(crs->course->quarters.begin(), crs->course->quarters.end(), curr_qtr.quarter) - crs->course->quarters.begin();
+	int next_qtr_index = find(crs->quarters.begin(), crs->quarters.end(), curr_qtr.quarter) - crs->quarters.begin();
 	QuarterNode output;
 	output.year = curr_qtr.year;
-	if ((++next_qtr_index) >= crs->course->quarters.size())
+	if ((++next_qtr_index) >= crs->quarters.size())
 	{
 		//cycle back to the first
-		output.quarter = crs->course->quarters[0];
+		output.quarter = crs->quarters[0];
 		output.year++;
 		return output;
 	}
 	else
 	{
-		output.quarter = crs->course->quarters[next_qtr_index];
+		output.quarter = crs->quarters[next_qtr_index];
 	}
 	if (static_cast<int>(output.quarter) < static_cast<int>(curr_qtr.quarter))
 	{
