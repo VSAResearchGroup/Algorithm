@@ -79,7 +79,7 @@ float PlanPrunner::compute_max_credit_preference(const DegreePlan& plan, int max
 		if (credits > max_credit_pref)
 		{
 			//once no of credits is twice the max allowed or more, score for that quarter is 0
-			score = fmaxf(0, 1-((credits - max_credit_pref) / max_credit_pref));
+			score -= fminf(0, (credits - max_credit_pref) / max_credit_pref);
 		}
 
 		sum_score += score;
@@ -115,7 +115,7 @@ float PlanPrunner::compute_max_budget_preference(const DegreePlan& plan, float m
 		total_cost = compute_cost(credits);
 		
 		//use bi-directional interpolation to approximate the score from both inequalities sides
-		score = fmaxf(0, 1 - (fabsf(total_cost - max_budget_pref) / max_budget_pref));
+		score -= fminf(0, fabsf(total_cost - max_budget_pref) / max_budget_pref);
 		
 
 		sum_score += score;
