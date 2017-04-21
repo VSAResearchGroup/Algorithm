@@ -165,7 +165,6 @@ void clean_up(map<AugNode*, CourseMatrix>* paths, map<int, CourseNode*>* _crs_de
 void generate_plans(const char* input, char* output, size_t len)
 {
 
-	
 	Parser* parser = new JsonParser();
 
 	map<int, CourseNode*>* _crs_details = new map<int, CourseNode*>(); //holds all other course information like class schedules, etc
@@ -177,10 +176,11 @@ void generate_plans(const char* input, char* output, size_t len)
 	QuarterNode start_qtr;
 	start_qtr.quarter = FALL;
 	start_qtr.year = 2016;
-	auto plans = planner.planPhase2(paths, start_qtr,TIME_OF_DAY::DAY,10,3500);
-	
+	auto plans = planner.planPhase2(paths, start_qtr, DayTimeFlags::noon | DayTimeFlags::morning, 10, 3500);
+	//print_plans(plans);
 	string json_result = parser->generate_output_str(plans);
 	delete parser;
+	cout << "JSON Output: " << json_result << endl;
 	strcpy_s(output, len, json_result.c_str());
 	cout << "Phase 2 Completed" << endl;
 	clean_up(&paths, _crs_details);

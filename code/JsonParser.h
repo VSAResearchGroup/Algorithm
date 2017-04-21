@@ -14,6 +14,8 @@ class JsonParser : public Parser
 {
 private:
 	int remap_qtr_for_output(QUARTER input);
+
+	QUARTER map_qtr_for_input(QUARTER input);
 	
 public:
 	JsonParser() {}

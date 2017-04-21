@@ -1,8 +1,9 @@
 #include "SerialPlanner.h"
 #include "PlanPrunner.h"
 #include <set>
+#include <fstream>
 
-
+fstream logger;
 
 SerialPlanner::SerialPlanner(map<int, CourseNode*>* _crs_details)
 {
@@ -21,26 +22,17 @@ void SerialPlanner::reset_queued_flags()
 
 
 
-DegreePlan SerialPlanner::chain_end_courses(map<AugNode*, CourseMatrix>& paths_map, QuarterNode start_qtr)
+DegreePlan SerialPlanner::emit_new_plan( QuarterNode start_qtr)
 {
 	DegreePlan qtr_map;
 	unsigned short start_yr = start_qtr.year;
+	QuarterNode temp = start_qtr;
 	for (int i = 0; i < 4; i++)
 	{
 		qtr_map.insert(pair<QuarterNode, vector<CourseNode*>>(start_qtr, vector<CourseNode*>()));
 		start_qtr = start_qtr.next_qtr();
 	}
-	for (auto target = paths_map.begin(); target != paths_map.end(); target++)
-	{
-		CourseNode* course = (*_crs_details)[target->first->course_ids[0]];
-		QuarterNode qtr;
-		qtr.quarter = course->quarters[0]; 
-		qtr.year = start_yr;
-		if (qtr_map.find(qtr) == qtr_map.end())
-			qtr.year++;
-		qtr_map[qtr].push_back(course);
-		course->isQueued = true;
-	}
+	
 	return qtr_map;
 }
 
@@ -57,8 +49,9 @@ void SerialPlanner::merge_paths_into_qtr_chain(DegreePlan& qtr_chain, vector<Aug
 				if (!course->isQueued)
 				{
 					QuarterNode qtr;
-					qtr.quarter = (*_crs_details)[crs_id]->quarters[0];
+					qtr.quarter = (*_crs_details)[crs_id]->get_current_schedule().qtr;
 					qtr.year = year;
+			//		logger << "Fresh course about to be placed: " << course->course_code << "qtr: " << qtr.quarter <<" yr: "<< year<<endl;
 					place_crs_in_chain(qtr_chain, course, qtr);
 				}
 				
@@ -98,9 +91,10 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, CourseNode* crs, Q
 		for (auto c = qtr_itr->second.begin(); c != qtr_itr->second.end(); c++)
 		{
 			CourseNode* c_val = *c;
-			auto req_ptr = find((*_crs_details)[crs->course_code]->post_reqs.begin(), (*_crs_details)[crs->course_code]->post_reqs.end(),c_val->course_code);
-			if (req_ptr != (*_crs_details)[crs->course_code]->post_reqs.end())
+			auto req_ptr = find((*_crs_details)[c_val->course_code]->pre_reqs.begin(), (*_crs_details)[c_val->course_code]->pre_reqs.end(),crs->course_code);
+			if (req_ptr != (*_crs_details)[c_val->course_code]->pre_reqs.end())
 			{//crs is a pre-requisite to c 
+			//	logger << "BEFORE: Crs: " << crs->course_code << " is a pre-requisite to C: " << c_val->course_code << " qtr: "<< qtr_itr->first.quarter << "yr:" << qtr_itr->first.year<< endl; 
 				crs_for_deference.insert(pair<CourseNode*, QuarterNode>(*c, qtr_itr->first)); //add c to a list of courses to be deferred
 			}
 			
@@ -111,18 +105,20 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, CourseNode* crs, Q
 
 		for (auto c = test_qtr_crses->begin(); c != test_qtr_crses->end(); c++)
 		{
-			auto req_ptr = find((*_crs_details)[(*c)->course_code]->post_reqs.begin(), (*_crs_details)[(*c)->course_code]->post_reqs.end(), crs->course_code);
-			
 			CourseNode* c_val = *c;
-			auto rev_req_ptr = find((*_crs_details)[crs->course_code]->post_reqs.begin(), (*_crs_details)[crs->course_code]->post_reqs.end(), c_val->course_code);
-			if (req_ptr != (*_crs_details)[(*c)->course_code]->post_reqs.end())
+			auto req_ptr = find((*_crs_details)[crs->course_code]->pre_reqs.begin(), (*_crs_details)[crs->course_code]->pre_reqs.end(), c_val->course_code);
+			
+			
+			auto rev_req_ptr = find((*_crs_details)[c_val->course_code]->pre_reqs.begin(), (*_crs_details)[c_val->course_code]->pre_reqs.end(), crs->course_code);
+			if (req_ptr != (*_crs_details)[crs->course_code]->pre_reqs.end())
 			{ //c is a pre-requisite  to crs
+//				logger << "PRESENT: c: " <<   c_val->course_code << " is a pre-requisite to Crs: " << crs->course_code << " qtr: " << qtr.quarter << "yr:" << qtr.year << endl;
 				add_crs = false; //do not add crs to this quarter
 				break;
 			}
-			else if (rev_req_ptr != (*_crs_details)[crs->course_code]->post_reqs.end())
+			else if (rev_req_ptr != (*_crs_details)[c_val->course_code]->pre_reqs.end())
 			{//crs is a pre-requisite to c 
-				
+	//			logger << "PRESENT: Crs: " << crs->course_code << " is a pre-requisite to C: " << c_val->course_code << " qtr: " << qtr.quarter << "yr:" << qtr.year << endl;
 				crs_for_deference.insert(pair<CourseNode*, QuarterNode>(*c, qtr)); //add c to a list of courses to be deferred
 			}
 		}
@@ -136,10 +132,11 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, CourseNode* crs, Q
 			for (auto next_qtr_crs = next_qtrs->second.begin(); next_qtr_crs != next_qtrs->second.end(); next_qtr_crs++)
 			{
 				CourseNode* c_val = *next_qtr_crs;
-				auto req_ptr = find((*_crs_details)[c_val->course_code]->post_reqs.begin(), (*_crs_details)[c_val->course_code]->post_reqs.end(), crs->course_code);
-				if (req_ptr != (*_crs_details)[c_val->course_code]->post_reqs.end())
+				auto req_ptr = find((*_crs_details)[crs->course_code]->pre_reqs.begin(), (*_crs_details)[crs->course_code]->pre_reqs.end(), c_val->course_code);
+				if (req_ptr != (*_crs_details)[crs->course_code]->pre_reqs.end())
 				{
 					//c_val is a pre-requisite to crs
+			//		logger << "FUTURE: c: " << c_val->course_code << " is a pre-requisite to Crs: " << crs->course_code << " qtr: " << next_qtrs->first.quarter << "yr:" << next_qtrs->first.year << endl;
 					add_crs = false;
 					break;
 				}
@@ -151,13 +148,8 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, CourseNode* crs, Q
 		}
 	}
 
-	if (add_crs)
-	{
-		//add crs to current quarter
-		test_qtr_crses->push_back(crs);
-		crs->isQueued = true;
-	}
-	else
+	
+	if(!add_crs)
 	{
 		//if crs is not going to be added, include it in the deference list
 		crs_for_deference.insert(pair<CourseNode*, QuarterNode>(crs, qtr));
@@ -172,15 +164,44 @@ void SerialPlanner::place_crs_in_chain(DegreePlan& qtr_chain, CourseNode* crs, Q
 				qtr_crses.erase(remove);
 			}
 	}
+
+	if (add_crs)
+	{
+
+		//check if maximum credits for a quarter have been exceeded
+		float total_credits = 0.0;
+		for (auto& qtr_crs : *test_qtr_crses)
+		{
+			total_credits += qtr_crs->compute_no_of_credits();
+		}
+		if (total_credits + crs->compute_no_of_credits() > MAX_POSSIBLE_CREDITS_QTR)
+		{
+			//maximum credits will be exceeded of quarter is added
+			//crs is not going to be added, include it in the deference list
+			crs_for_deference.insert(pair<CourseNode*, QuarterNode>(crs, qtr));
+		//	logger << "Maximum credits exceeded: " << crs->course_code << " qtr: " << qtr.quarter << "yr:" << qtr.year << endl;
+			
+		}
+		else
+		{
+			
+			//add crs to current quarter
+			//logger << "Course Added: " << crs->course_code << " qtr: " << qtr.quarter << "yr:" << qtr.year << endl;
+			test_qtr_crses->push_back(crs);
+			crs->isQueued = true;
+		}
+
+	}
 	for (auto deferee = crs_for_deference.begin(); deferee != crs_for_deference.end(); deferee++)
 	{
+		//logger <<"deferred course about to be placed: " << deferee->first->course_code << "qtr: " << deferee->second.quarter << " yr: " << deferee->second.year << endl;
 		//cycle to next placeable quarter
 		place_crs_in_chain(qtr_chain, deferee->first, get_crs_next_feasible_qtr(deferee->first, deferee->second));
 	}
 	
 }
 
-void SerialPlanner::resolve_clashes(map<int,DegreePlan>& plans, map<int, CourseNode*>* _crs_details)
+void SerialPlanner::resolve_clashes(map<int,DegreePlan>& plans)
 {
 	final_output = plans;
 	for (auto plan = plans.begin(); plan != plans.end(); plan++)
@@ -212,9 +233,9 @@ void SerialPlanner::reorder_for_clash(map<int,DegreePlan>& plans,  DegreePlan& s
 				//check if a course overlaps with another
 				CourseNode* crs1 = qtr->second[i];
 				CourseNode* crs2 = qtr->second[j];
-				for (schedule& sch1 : crs1->schedules)
+				for (schedule& sch1 : crs1->get_current_schedule().schedules)
 				{
-					for (schedule& sch2 : crs2->schedules)
+					for (schedule& sch2 : crs2->get_current_schedule().schedules)
 					{
 						if (sch1.day == sch2.day)
 						{
@@ -276,24 +297,33 @@ map<int,DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& paths_map
 		}
 	}
 	int no_of_plans = target_crs->second.size(); //get the maximum number of paths to generate the most plans possible without repitition
-	
+	logger.open("logs.txt", fstream::in | fstream::out | fstream::trunc);
+
 	map<int,DegreePlan> output;
 	for (int count = 0; count < no_of_plans; count++)
 	{
 		reset_queued_flags();  //reset isQueued flags
 		
-		DegreePlan qtr_chain = chain_end_courses(paths_map_input, start_qtr); //fresh output copy
+		DegreePlan qtr_chain = emit_new_plan(start_qtr); //fresh output copy
 	
 		
 		for (auto crses = paths_map_input.begin(); crses != paths_map_input.end(); crses++)
 		{
-			merge_paths_into_qtr_chain(qtr_chain, crses->second[rand() % crses->second.size()], start_qtr.year);
+			if (crses->second.size() == 0)
+			{
+				//target courses without pre-requisites
+				merge_paths_into_qtr_chain(qtr_chain, {crses->first}, start_qtr.year);
+			}
+			else
+			{
+				merge_paths_into_qtr_chain(qtr_chain, crses->second[rand() % crses->second.size()], start_qtr.year);
+			}
 		}
 		//emit new plan
 		output.insert(pair<int,DegreePlan>(glb_plan_id++,qtr_chain));
 	}
 	//resolve all class periods overlap
-	resolve_clashes(output,_crs_details);
+	resolve_clashes(output);
 	rank_plans(tod_pref, max_credit_pref, max_budget_pref);
 	
 	return final_output;
@@ -307,6 +337,8 @@ void SerialPlanner::rank_plans(TIME_OF_DAY tod_pref, int max_credit_pref, float 
 	for (auto plan = final_output.begin(); plan != final_output.end(); plan++)
 	{
 		assessment result = PlanPrunner::assess_plan(plan->second, tod_pref, max_credit_pref, max_budget_pref);
+		
+
 		size_t rank_size = rank_table.size();
 		int i = rank_size - 1;
 		while (i >= 0 && result.aggregate > rank_table[i].first)
@@ -330,4 +362,6 @@ void SerialPlanner::rank_plans(TIME_OF_DAY tod_pref, int max_credit_pref, float 
 	{
 		final_output.insert(pair<int,DegreePlan>(glb_plan_id++,plan->second));
 	}
+	//TODO: Remove Logger
+	logger.close();
 }

@@ -31,7 +31,7 @@ public:
 	/*
 	computes suitability for time of day on a scale of 0 - 1
 	plan: degree plan under consideration
-	tod_pref: preferred time of day (day, evening, or either)
+	tod_pref: bitflag for preferred time of day(morning, afternoon, evening, or either)
 	RETURNS: a normalized score for the preferred time of day metric
 	*/
 	static float compute_tod_preference(const DegreePlan& plan, TIME_OF_DAY tod_pref);

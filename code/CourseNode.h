@@ -19,6 +19,8 @@ struct QuarterNode;
 typedef vector<vector<AugNode*>> CourseMatrix;
 typedef unsigned short ushort;
 typedef map<QuarterNode, vector<CourseNode*>> DegreePlan;
+typedef unsigned char TIME_OF_DAY;
+
 
 
 enum QUARTER
@@ -38,7 +40,17 @@ enum DAY_OF_WEEK
 	FRI = 5
 };
 
-const int EVENING_MARKER = 68; //marks the integral value of time when evening classes starts
+struct DayTimeFlags
+{
+	static const TIME_OF_DAY morning = 1 << 2; //0100
+	static const TIME_OF_DAY noon = 1 << 1; //0010
+	static const TIME_OF_DAY evening = 1; //0001
+};
+
+const int NOON_MARKER = 72; //marks the integral value of time when noon classes (12PM)
+const int EVENING_MARKER = 102; //marks the integral value of time when evening classes starts (5PM)
+
+const int MAX_POSSIBLE_CREDITS_QTR = 25;
 
 struct schedule
 {
@@ -46,14 +58,23 @@ struct schedule
 	pair<int, int> time;
 };
 
+struct CourseSchedule
+{
+	QUARTER qtr;
+	vector<schedule> schedules;
+};
+
 struct CourseNode
 {
 	int course_code;
-	vector<QUARTER> quarters;
-	vector<schedule> schedules;
-	vector<int> post_reqs;
+	vector<CourseSchedule> crs_schedules;
+	int current_sch_index;
+	vector<int> pre_reqs;
 	bool isQueued;
-	CourseNode(int code,vector<QUARTER> quarter,vector<schedule> schedules): course_code(code),quarters(quarter),schedules(schedules), isQueued(false) {}
+	bool isFloating;
+	CourseNode(int code,vector<CourseSchedule> schedules): course_code(code),crs_schedules(schedules), current_sch_index(0), isQueued(false), isFloating(false) {}
+	CourseSchedule get_current_schedule();
+	float compute_no_of_credits();
 };
 
 
@@ -97,12 +118,7 @@ struct QuarterNode
 //RETURNS: the next possible quarter, e.g. a course taken only in FALL 2016 will return FALL 2017
 QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr);
 
-enum TIME_OF_DAY
-{
-	DAY = 1,
-	EVENING =2,
-	BOTH = 3
-};
+
 
 
 //a structure that encapsulates the score of a plan in each dimension (from 0 -1) and their respective weights
@@ -111,6 +127,7 @@ struct assessment
 	pair<float,float> time_of_day_score;
 	pair<float, float> max_credits_score;
 	pair<float, float> max_budget_score;
+
 	float aggregate;
 
 	assessment();

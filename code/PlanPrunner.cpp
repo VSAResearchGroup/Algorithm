@@ -16,8 +16,8 @@ assessment PlanPrunner::assess_plan(const DegreePlan& plan, TIME_OF_DAY tod_pref
 
 float PlanPrunner::compute_tod_preference(const DegreePlan& plan, TIME_OF_DAY tod_pref)
 {
-	if (tod_pref == TIME_OF_DAY::BOTH)
-	{
+	if (tod_pref == 7)
+	{ //all last 3 bits set
 		return 1.0; //anything goes (so max score)
 	}
 
@@ -31,20 +31,31 @@ float PlanPrunner::compute_tod_preference(const DegreePlan& plan, TIME_OF_DAY to
 			continue; //avoid division by zero
 		}
 		float decrement = 1.0 / quarter->second.size();
+		
 		for (auto& crs : quarter->second)
 		{
-			for (auto& sch : crs->schedules)
+			TIME_OF_DAY crs_bit_flag;
+			int start_time = crs->get_current_schedule().schedules[0].time.first;
+
+			if (start_time < NOON_MARKER)
 			{
-				if ((tod_pref == TIME_OF_DAY::DAY && sch.time.first >= EVENING_MARKER)
-					||(tod_pref == TIME_OF_DAY::EVENING && sch.time.first < EVENING_MARKER))
-				{
-					score -= decrement;
-					break;
-				}
-				
+				crs_bit_flag = 1 << 2;
 			}
-			
-		
+			else if(start_time < EVENING_MARKER)
+			{
+				crs_bit_flag = 1 << 1;
+			}
+			else
+			{
+				crs_bit_flag = 1;
+			}
+
+			if (!(tod_pref & crs_bit_flag))
+			{
+				score -= decrement;
+				break;
+			}
+
 		}
 		sum_score += score;
 	}
@@ -69,10 +80,7 @@ float PlanPrunner::compute_max_credit_preference(const DegreePlan& plan, int max
 		for (auto& crs : quarter->second)
 		{
 			float crdt = 0.0;
-			for (auto& sch : crs->schedules)
-			{
-				crdt += (sch.time.second - sch.time.first) / 4; //a unit to 15 mins hence 4 units to an hour
-			}
+			crdt += crs->compute_no_of_credits();
 			crdt *= 1.2; //conversion rate from hours to credits is h * 1.2c
 			credits += crdt;
 		}
@@ -105,10 +113,8 @@ float PlanPrunner::compute_max_budget_preference(const DegreePlan& plan, float m
 		for (auto& crs : quarter->second)
 		{
 			float crdt = 0.0;
-			for (auto& sch : crs->schedules)
-			{
-				crdt += (sch.time.second - sch.time.first) / 4; //a unit to 15 mins hence 4 units to an hour
-			}
+			
+			crdt += crs->compute_no_of_credits();
 			crdt *= 1.2; //conversion rate from hours to credits is h * 1.2c
 			credits += crdt;
 		}

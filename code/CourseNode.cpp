@@ -1,5 +1,23 @@
 #include "CourseNode.h"
 
+
+
+float CourseNode::compute_no_of_credits()
+{
+	CourseSchedule sch = crs_schedules[0];
+	float total_credits = 0.0;
+	for (auto& interval : sch.schedules)
+	{
+		total_credits += (interval.time.second - interval.time.first) / 6.0;
+	}
+	total_credits *= 1.2;
+	return total_credits;
+}
+
+CourseSchedule CourseNode::get_current_schedule()
+{
+	return crs_schedules[current_sch_index];
+}
 QuarterNode QuarterNode::next_qtr()
 {
 	QuarterNode qtr = *this;
@@ -48,24 +66,18 @@ bool QuarterNode::operator <(const QuarterNode& rhs) const
 
 QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr)
 {
-	int next_qtr_index = find(crs->quarters.begin(), crs->quarters.end(), curr_qtr.quarter) - crs->quarters.begin();
+	int past_index = crs->current_sch_index;
+	crs->current_sch_index = (1 + crs->current_sch_index) % crs->crs_schedules.size();
 	QuarterNode output;
 	output.year = curr_qtr.year;
-	if ((++next_qtr_index) >= crs->quarters.size())
+	output.quarter = crs->crs_schedules[crs->current_sch_index].qtr;
+	if ((crs->current_sch_index < past_index && output.quarter != QUARTER::FALL)
+		|| crs->crs_schedules[past_index].qtr == QUARTER::FALL)
 	{
-		//cycle back to the first
-		output.quarter = crs->quarters[0];
-		output.year++;
-		return output;
-	}
-	else
-	{
-		output.quarter = crs->quarters[next_qtr_index];
-	}
-	if (static_cast<int>(output.quarter) < static_cast<int>(curr_qtr.quarter))
-	{
+		//cycled back to the beginning of the first quarter which wasn't the fall quarter
 		output.year++;
 	}
+	
 	return output;
 }
 

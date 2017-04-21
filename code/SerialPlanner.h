@@ -16,10 +16,9 @@ private:
 	
 	
 
-	//starts a new degree plan by fixing only the target courses in their appropriate quarters
-	//paths_map: a reference to the output from phase 1
+	//creates an empty degree plan with stock quarters
 	//qtr_yr: intended starting quarter
-	DegreePlan chain_end_courses(map<AugNode*, CourseMatrix>& paths_map, QuarterNode qtr_yr);
+	DegreePlan emit_new_plan(QuarterNode qtr_yr);
 
 	//merges a list of courses into current degree plan considering only quarters and course requisite relationships
 	//qtr_chain: the current degree plan in which courses are being merged into
@@ -39,7 +38,7 @@ private:
 
 	//generate new plans in situations where quarters contain courses with schedule clashes
 	//plans: a reference to the list of generated degree plans
-	void resolve_clashes(map<int,DegreePlan>& plans, map<int, CourseNode*>* _crs_details);
+	void resolve_clashes(map<int,DegreePlan>& plans);
 
 	//recursively generate new permutations of conflict-free degree plans (if any)
 	//plans: a reference to the list of generated degree plans
@@ -61,7 +60,7 @@ public:
 	//The second phase of the selected planning algorithm
 	//input: a reference to the output from phase 1
 	//qtr: the intended starting quarter for student
-    //tod_pref: preferred time of day(day, evening, or either)
+    //tod_pref: bitflag for preferred time of day(morning, afternoon, evening, or either)
 	//max_credit_pref : maximum number of credits to be taken per quarter
 	//max_budget_pref : approximate budget limit per quarter
 	//RETURNS: a list of possible degree plans scheduled in a chronological sequence of quarters
