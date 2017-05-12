@@ -63,23 +63,95 @@ bool QuarterNode::operator <(const QuarterNode& rhs) const
 	}
 }
 
+bool QuarterNode::operator<=(const QuarterNode& rhs) const
+{
+	return (*this) < rhs || (*this) == rhs;
+}
+
+
+bool QuarterNode::operator >=(const QuarterNode& rhs) const
+{
+	if (this->year > rhs.year)
+	{
+		return true;
+	}
+	
+	if (this->year == rhs.year)
+	{
+		return this->quarter >= rhs.quarter;
+	}
+
+	return false;
+}
+
+bool rank_index::operator != (const rank_index& rhs) const
+{
+	return  this->index != rhs.index;
+}
+
+bool rank_index::operator == (const rank_index& rhs) const
+{
+	return   this->index == rhs.index;
+}
+
+
+bool rank_index::operator < (const rank_index& rhs) const
+{
+	return  this->index < rhs.index;
+}
+
+
+
+
+
 
 QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr)
 {
-	int past_index = crs->current_sch_index;
-	crs->current_sch_index = (1 + crs->current_sch_index) % crs->crs_schedules.size();
 	QuarterNode output;
 	output.year = curr_qtr.year;
-	output.quarter = crs->crs_schedules[crs->current_sch_index].qtr;
-	if ((crs->current_sch_index < past_index && output.quarter != QUARTER::FALL)
-		|| crs->crs_schedules[past_index].qtr == QUARTER::FALL)
-	{
-		//cycled back to the beginning of the first quarter which wasn't the fall quarter
-		output.year++;
-	}
+	do {
+		
+		int past_index = crs->current_sch_index;
+		crs->current_sch_index = (1 + crs->current_sch_index) % crs->crs_schedules.size();
+
+
+		output.quarter = crs->get_current_schedule().qtr;
+
+		if (crs->get_current_schedule().qtr <= crs->crs_schedules[past_index].qtr)
+		{
+				output.year++;
+		}
+
+	} while (output <= curr_qtr);
+	
+
 	
 	return output;
 }
+
+
+
+QuarterNode get_crs_prev_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr)
+{
+	QuarterNode output;
+	output.year = curr_qtr.year;
+	do {
+
+		int next_index = crs->current_sch_index;
+		crs->current_sch_index = ( crs->current_sch_index -1  < 0 ?  crs->crs_schedules.size() - 1 : crs->current_sch_index -1 );
+
+
+		output.quarter = crs->get_current_schedule().qtr;
+
+		if (crs->get_current_schedule().qtr >= crs->crs_schedules[next_index].qtr)
+		{
+			output.year --;
+		}
+	} while (output >= curr_qtr);
+
+	return output;
+}
+
 
 
 
@@ -93,7 +165,7 @@ assessment::assessment()
 
 void assessment::compute_aggregate()
 {
-	aggregate = (max_budget_score.first * max_budget_score.second + max_credits_score.first * max_credits_score.second +
+	aggregate =  (max_budget_score.first * max_budget_score.second + max_credits_score.first * max_credits_score.second +
 		time_of_day_score.first * time_of_day_score.second) / (max_budget_score.first + max_credits_score.first +
 			time_of_day_score.first);
 }

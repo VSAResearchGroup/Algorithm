@@ -25,7 +25,7 @@ public:
 
 	//a virtual implementation of the Planner.generate_output_str designed for generating a json string
 	//output: a list of tentative degree plans C++ objects
-	virtual const string generate_output_str(map<int,DegreePlan>&  output);
+	virtual const string generate_output_str(map<rank_index,DegreePlan>&  output);
 	
 };
 

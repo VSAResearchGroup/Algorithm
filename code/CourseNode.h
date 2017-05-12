@@ -69,7 +69,7 @@ struct CourseNode
 	int course_code;
 	vector<CourseSchedule> crs_schedules;
 	int current_sch_index;
-	vector<int> pre_reqs;
+	vector<int> post_reqs;
 	bool isQueued;
 	bool isFloating;
 	CourseNode(int code,vector<CourseSchedule> schedules): course_code(code),crs_schedules(schedules), current_sch_index(0), isQueued(false), isFloating(false) {}
@@ -108,6 +108,10 @@ struct QuarterNode
 
 	bool operator <(const QuarterNode& rhs) const;
 
+	bool operator <=(const QuarterNode& rhs) const;
+
+	bool operator >=(const QuarterNode& rhs) const;
+
 };
 
 
@@ -117,6 +121,14 @@ struct QuarterNode
 //curr_qtr: current quarter under consideration
 //RETURNS: the next possible quarter, e.g. a course taken only in FALL 2016 will return FALL 2017
 QuarterNode get_crs_next_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr);
+
+//gets the previous possible quarter a course can be taken before the current quarter
+//crs: pointer to a course and its details
+//curr_qtr: current quarter under consideration
+//RETURNS: the previous possible quarter, e.g. a course taken only in FALL 2017 will return FALL 2016
+QuarterNode get_crs_prev_feasible_qtr(CourseNode* crs, QuarterNode curr_qtr);
+
+
 
 
 
@@ -132,6 +144,16 @@ struct assessment
 
 	assessment();
 	void compute_aggregate();
+};
+
+struct rank_index
+{
+	int index;
+	float score;
+
+	bool operator != (const rank_index& rhs) const;
+	bool operator == (const rank_index& rhs) const;
+	bool operator < (const rank_index& rhs) const;
 };
 
 #endif

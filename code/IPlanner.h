@@ -23,7 +23,7 @@ public:
 	//max_credit_pref : maximum number of credits to be taken per quarter
 	//max_budget_pref : approximate budget limit per quarter
 	//RETURNS: a list of possible degree plans scheduled in a chronological sequence of quarters
-	virtual map<int,DegreePlan> phase2(map<AugNode*, CourseMatrix>& input,QuarterNode start_qtr,TIME_OF_DAY tod_pref, int max_credit_pref, float max_budget_pref) = 0;
+	virtual map<rank_index,DegreePlan> phase2(map<AugNode*, CourseMatrix>& input,QuarterNode start_qtr,TIME_OF_DAY tod_pref, int max_credit_pref, float max_budget_pref) = 0;
 
 
 };

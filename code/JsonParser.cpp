@@ -71,7 +71,7 @@ const map<AugNode*, CourseMatrix> JsonParser::parse_input(const char* input, map
 			int pre_crs_id = pre_crs->get<uint32_t>();
 			pre_crs_ids.push_back(pre_crs_id);
 		}
-		auto* crs_pre_req = &_crs_details->at(crs_id)->pre_reqs;
+		auto* crs_pre_req = &_crs_details->at(crs_id)->post_reqs;
 		crs_pre_req->insert(crs_pre_req->end(), pre_crs_ids.begin(), pre_crs_ids.end());
 	}
 
@@ -134,14 +134,16 @@ int JsonParser::remap_qtr_for_output(QUARTER input)
 	return q;
 }
 
-string const JsonParser::generate_output_str(map<int,DegreePlan>&  output)
+string const JsonParser::generate_output_str(map<rank_index,DegreePlan>&  output)
 {
 	json j_out;
 	
 	for (auto& plan : output)
 	{
+
 		json j_plan;
-		j_plan["PlanId"] = plan.first;
+		j_plan["PlanId"] = plan.first.index;
+		j_plan["PlanScore"] = plan.first.score;
 		for (auto& qtr : plan.second)
 		{
 			json j_qtr;

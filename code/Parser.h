@@ -19,7 +19,7 @@ public:
 
 	//Generates a serialized version of the degree plans
 	//output: a list of tentative degree plans C++ objects
-	virtual const string generate_output_str(map<int,DegreePlan>&  output) = 0;
+	virtual const string generate_output_str(map<rank_index,DegreePlan>&  output) = 0;
 };
 
 
