@@ -41,6 +41,11 @@ private:
 	//max_credit_pref : maximum number of credits to be taken per quarter
 	//max_budget_pref : approximate budget limit per quarter
 	void rank_plans(TIME_OF_DAY tod_pref, int max_credit_pref, float max_budget_pref);
+
+	//used to determine the path to select based on certain heuirstics
+	//paths: the list of paths to the target course
+	//RETURNS: the index of the selected path
+	int heuristic_path_section(CourseMatrix paths);
 public:
 	
 	//_crs_details: a pointer to the peripheral details of every course needed for the recommendation engine

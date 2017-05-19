@@ -42,6 +42,11 @@ DegreePlan SerialPlanner::emit_new_plan(QuarterNode start_qtr)
 }
 
 
+int SerialPlanner::heuristic_path_section(CourseMatrix paths)
+{
+	return rand() % paths.size();
+}
+
 void SerialPlanner::merge_paths_into_qtr_chain(DegreePlan& qtr_chain, vector<AugNode*> path, ushort year, int max_credit_pref)
 {
 
@@ -305,7 +310,7 @@ map<rank_index, DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& p
 			}
 			else
 			{
-				merge_paths_into_qtr_chain(qtr_chain, crses->second[rand() % crses->second.size()], start_qtr.year,max_credit_pref);
+				merge_paths_into_qtr_chain(qtr_chain, crses->second[heuristic_path_section(crses->second)], start_qtr.year,max_credit_pref);
 			}
 		}
 
@@ -321,6 +326,7 @@ map<rank_index, DegreePlan> SerialPlanner::phase2(map<AugNode*, CourseMatrix>& p
 			cout << "Plan " << glb_plan_id << " Generated" << endl;
 		}
 		else {
+			//skip (no feasible combination found)
 			count--;
 		}
 
